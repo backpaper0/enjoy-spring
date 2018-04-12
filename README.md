@@ -256,3 +256,64 @@ management.endpoints.web.exposure.include=*
 |コンポーネント一覧|http://localhost:8080/actuator/beans|
 |環境値一覧|http://localhost:8080/actuator/env|
 |Spring MVCのエンドポイント一覧|http://localhost:8080/actuator/mappings|
+
+## データベースをPostgreSQLに変更する
+
+"Dependencies"で`H2`を削除して、`PostgreSQL`を追加で選択して"Generate Project"。
+
+アプリケーションを一旦停止して`pom.xml`を差し替える。
+
+PostgreSQLを起動する。
+
+ここではDockerでの方法を記載する。
+次のコマンドでPostgreSQLが起動する。
+
+```
+docker run -d -p 5432:5432 --name=db -e POSTGRES_USER=demo postgres:10.3
+```
+
+接続情報は次の通り。
+
+|項目|値|
+|---|---|
+|ホスト|`localhost`|
+|ポート|`5432`|
+|データベース名|`demo`|
+|ユーザー名|`demo`|
+|パスワード|`demo`|
+
+Spring Data JPAはデフォルトだと組み込みH2なら勝手にDDLを発行してくれるが、PostgreSQLだと勝手には発行しなくなる。
+手動でテーブルの準備をする。
+
+今回はPostgreSQLクライアントもDockerから使用する。
+次のコマンドでpsqlを起動する。
+
+```
+docker run -it --rm --link db postgres:10.3 psql -h db demo demo
+```
+
+`message`テーブルを作成する。
+
+```sql
+CREATE TABLE message (
+    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    content VARCHAR(1000),
+    PRIMARY KEY (id)
+);
+```
+
+動作確認のためレコードを登録しておく。
+
+```sql
+INSERT INTO message (content) VALUES ('Hello, world!');
+```
+
+このPostgreSQLと繋ぐためJDBC接続情報を`application.properties`へ追加する。
+
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/demo
+spring.datasource.username=demo
+spring.datasource.password=demo
+```
+
+アプリケーションを起動して http://localhost:8080/messages をブラウザで開く。
