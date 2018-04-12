@@ -213,3 +213,21 @@ public class MessageController {
 ```
 
 http://localhost:8080/messages をブラウザで開く。
+
+## ログイン
+
+"Dependencies"で`Security`を追加で選択して"Generate Project"。
+
+アプリケーションを一旦停止して`pom.xml`を差し替えた後に再起動する。
+
+http://localhost:8080/messages をブラウザで開く。
+
+ユーザー名は`user`、パスワードはアプリケーション起動時にコンソールに出力されるUUID。
+
+ユーザー名とパスワードを変更する場合は`src/main/resources/`にある`application.properties`を変更する。
+例えばユーザー名を`uragami`、パスワードを`secret`に変更する場合は`application.properties`に次の記述を足す。
+
+```
+spring.security.user.name=uragami
+spring.security.user.password=secret
+```
