@@ -317,3 +317,43 @@ spring.datasource.password=demo
 ```
 
 アプリケーションを起動して http://localhost:8080/messages をブラウザで開く。
+
+## JARで実行する
+
+Spring Bootでは、WARを作ってTomcatなどにデプロイするのではなく、JARを作って`java -jar`で実行する。
+
+まずJARを作る。
+`mvnw`というコマンドが付いてくるので、それを使う。
+`mvnw`はMavenを実行するスクリプトで、必要に応じてMaven自体のダウンロードも行ってくれる。
+
+企業内ネットワークなど、プロキシ環境にある場合は環境変数`MAVEN_OPTS`を設定する必要がある。
+例えばプロキシサーバーのホストが`example.com`、ポートが`3128`とすると次のように`MAVEN_OPTS`を設定する。
+
+```sh
+MAVEN_OPTS=-Dhttp.proxyHost=example.com -Dhttp.proxyPort=3128 -Dhttps.proxyHost=example.com -Dhttps.proxyPort=3128
+```
+
+`package`ゴールでJARを作る。
+
+```sh
+mvnw package
+```
+
+作ったJARを実行する。
+
+```sh
+java -jar target/demo-0.0.1-SNAPSHOT.jar
+```
+
+Spring Bootアプリケーションはいくつかの手段で環境毎に設定値を変更できる。
+
+
+```sh
+# コマンドライン引数
+java -jar target/demo-0.0.1-SNAPSHOT.jar --server.port=8765
+# システムプロパティ
+java -Dserver.port=8765 -jar target/demo-0.0.1-SNAPSHOT.jar
+# 環境変数 (cf. https://12factor.net/ja/config )
+SERVER_PORT=8765 java -jar target/demo-0.0.1-SNAPSHOT.jar
+```
+
