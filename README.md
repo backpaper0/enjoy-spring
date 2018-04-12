@@ -231,3 +231,28 @@ http://localhost:8080/messages をブラウザで開く。
 spring.security.user.name=uragami
 spring.security.user.password=secret
 ```
+
+## メトリクス
+
+"Dependencies"で`Actuator`を追加で選択して"Generate Project"。
+
+アプリケーションを一旦停止して`pom.xml`を差し替えた後に再起動する。
+
+通常だと見られる情報が限られるので`application.properties`に次の設定を加える。
+
+```
+management.endpoints.web.exposure.include=*
+```
+
+これでメトリクスを取得したり、Springが管理しているコンポーネントを一覧したり、環境値を一覧できる。
+
+|エンドポイントの種類|URL|
+|---|---|
+|ヘルスチェック|http://localhost:8080/actuator/health|
+|メトリクス（CPU使用量）|http://localhost:8080/actuator/metrics/process.cpu.usage|
+|メトリクス（メモリ使用量）|http://localhost:8080/actuator/metrics/jvm.memory.used|
+|メトリクス（ロードされたクラス数）|http://localhost:8080/actuator/metrics/jvm.classes.loaded|
+|メトリクス（ライブスレッド数）|http://localhost:8080/actuator/metrics/jvm.threads.live|
+|コンポーネント一覧|http://localhost:8080/actuator/beans|
+|環境値一覧|http://localhost:8080/actuator/env|
+|Spring MVCのエンドポイント一覧|http://localhost:8080/actuator/mappings|
