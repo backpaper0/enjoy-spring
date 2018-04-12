@@ -42,9 +42,7 @@ IDEから`com.example.demo.DemoApplication`を実行して http://localhost:8080
 
 アプリケーションを一旦停止して`pom.xml`を差し替えた後に再起動する。
 
-### エンティティ
-
-`Message`クラスを作る。
+`Message`エンティティクラスを作る。
 
 ```java
 package com.example.demo;
@@ -82,8 +80,6 @@ public class Message implements Serializable {
 }
 ```
 
-### リポジトリ
-
 `MessageRepository`インターフェースを作る。
 
 ```java
@@ -95,9 +91,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 }
 ```
 
-### 動作確認用のREST API
-
-`MessageController`クラスを作る。
+動作確認用の`MessageController`クラスを作る。
 
 ```java
 package com.example.demo;
@@ -146,3 +140,76 @@ curl localhost:8080/messages
 ```sh
 curl localhost:8080/messages -X POST -d "content=My message"
 ```
+
+## Thymeleaf
+
+"Dependencies"で`Thymeleaf`を追加で選択して"Generate Project"。
+
+アプリケーションを一旦停止して`pom.xml`を差し替えた後に再起動する。
+
+`MessageController`クラスを修正する。
+
+```java
+package com.example.demo;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+@RequestMapping("/messages")
+public class MessageController {
+
+    private final MessageRepository repository;
+
+    public MessageController(MessageRepository repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping
+    public ModelAndView getAllMessage() {
+        final String viewName = "message-page";
+        final String modelName = "messages";
+        final List<Message> modelObject = repository.findAll();
+        return new ModelAndView(viewName, modelName, modelObject);
+    }
+
+    @PostMapping
+    public String post(@RequestParam String content) {
+        final Message entity = new Message();
+        entity.setContent(content);
+        repository.save(entity);
+        return "redirect:/messages";
+    }
+}
+```
+
+`src/main/resources/templates`へ`message-page.html`を作成する。
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Messages</title>
+</head>
+<body>
+    <h1>Messages</h1>
+    <form data-th-action="@{/messages}" method="post">
+        <input type="text" name="content" autofocus>
+        <button>Submit</button>
+    </form>
+    <p data-th-each="message : ${messages}"
+        data-th-text="${message.id + ': ' + message.content}">Dummy message</p>
+</body>
+</html>
+```
+
+http://localhost:8080/messages をブラウザで開く。
