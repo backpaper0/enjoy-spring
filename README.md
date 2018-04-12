@@ -6,7 +6,7 @@ Spring Initializrを使うと便利。
 
 * https://start.spring.io/
 
-## REST APIでHello, world!
+## [REST APIでHello, world!](https://github.com/backpaper0/enjoy-spring/tree/helloworld)
 
 Spring Initializrを開く。
 
@@ -36,7 +36,7 @@ public class HelloController {
 
 IDEから`com.example.demo.DemoApplication`を実行して http://localhost:8080/hello をブラウザで開く。
 
-## Spring Data JPA
+## [Spring Data JPA](https://github.com/backpaper0/enjoy-spring/tree/jpa)
 
 "Dependencies"で`JPA`, `H2`を追加で選択して"Generate Project"。
 
@@ -141,7 +141,7 @@ curl localhost:8080/messages
 curl localhost:8080/messages -X POST -d "content=My message"
 ```
 
-## Thymeleaf
+## [Thymeleaf](https://github.com/backpaper0/enjoy-spring/tree/thymeleaf)
 
 "Dependencies"で`Thymeleaf`を追加で選択して"Generate Project"。
 
@@ -214,7 +214,7 @@ public class MessageController {
 
 http://localhost:8080/messages をブラウザで開く。
 
-## ログイン
+## [ログイン](https://github.com/backpaper0/enjoy-spring/tree/login)
 
 "Dependencies"で`Security`を追加で選択して"Generate Project"。
 
@@ -232,7 +232,7 @@ spring.security.user.name=uragami
 spring.security.user.password=secret
 ```
 
-## メトリクス
+## [メトリクス](https://github.com/backpaper0/enjoy-spring/tree/metrics)
 
 "Dependencies"で`Actuator`を追加で選択して"Generate Project"。
 
@@ -257,7 +257,7 @@ management.endpoints.web.exposure.include=*
 |環境値一覧|http://localhost:8080/actuator/env|
 |Spring MVCのエンドポイント一覧|http://localhost:8080/actuator/mappings|
 
-## データベースをPostgreSQLに変更する
+## [データベースをPostgreSQLに変更する](https://github.com/backpaper0/enjoy-spring/tree/postgres)
 
 "Dependencies"で`H2`を削除して、`PostgreSQL`を追加で選択して"Generate Project"。
 
@@ -318,7 +318,7 @@ spring.datasource.password=demo
 
 アプリケーションを起動して http://localhost:8080/messages をブラウザで開く。
 
-## JARで実行する
+## [JARで実行する](https://github.com/backpaper0/enjoy-spring/tree/jar)
 
 Spring Bootでは、WARを作ってTomcatなどにデプロイするのではなく、JARを作って`java -jar`で実行する。
 
